@@ -11,4 +11,12 @@
             MsgBox("Invalid email or password")
         End If
     End Sub
+
+    Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
+        If RadioButton1.Checked Then
+            pass.PasswordChar = ControlChars.NullChar ' Show the password
+        Else
+            pass.PasswordChar = "*"c ' Hide the password
+        End If
+    End Sub
 End Class

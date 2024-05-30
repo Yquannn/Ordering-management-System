@@ -61,7 +61,7 @@ Partial Class Form1
         Guna2CustomGradientPanel1.Location = New Point(-13, -1)
         Guna2CustomGradientPanel1.Name = "Guna2CustomGradientPanel1"
         Guna2CustomGradientPanel1.ShadowDecoration.CustomizableEdges = CustomizableEdges11
-        Guna2CustomGradientPanel1.Size = New Size(714, 516)
+        Guna2CustomGradientPanel1.Size = New Size(684, 506)
         Guna2CustomGradientPanel1.TabIndex = 0
         ' 
         ' Guna2CirclePictureBox1
@@ -103,9 +103,10 @@ Partial Class Form1
         ' RadioButton1
         ' 
         RadioButton1.AutoSize = True
+        RadioButton1.Font = New Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point)
         RadioButton1.Location = New Point(26, 192)
         RadioButton1.Name = "RadioButton1"
-        RadioButton1.Size = New Size(107, 19)
+        RadioButton1.Size = New Size(118, 21)
         RadioButton1.TabIndex = 28
         RadioButton1.TabStop = True
         RadioButton1.Text = "Show password"
@@ -148,7 +149,7 @@ Partial Class Form1
         Label1.BackColor = Color.Transparent
         Label1.Font = New Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point)
         Label1.ForeColor = Color.Black
-        Label1.Location = New Point(17, 132)
+        Label1.Location = New Point(17, 123)
         Label1.Name = "Label1"
         Label1.Size = New Size(79, 21)
         Label1.TabIndex = 26
@@ -160,7 +161,7 @@ Partial Class Form1
         Label3.BackColor = Color.Transparent
         Label3.Font = New Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point)
         Label3.ForeColor = Color.Black
-        Label3.Location = New Point(16, 57)
+        Label3.Location = New Point(16, 48)
         Label3.Name = "Label3"
         Label3.Size = New Size(51, 21)
         Label3.TabIndex = 25

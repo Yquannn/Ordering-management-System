@@ -581,9 +581,8 @@ Partial Class Form2
         totalEarning.Font = New Font("Arial", 27.75F, FontStyle.Regular, GraphicsUnit.Point)
         totalEarning.Location = New Point(3, 16)
         totalEarning.Name = "totalEarning"
-        totalEarning.Size = New Size(81, 42)
+        totalEarning.Size = New Size(0, 42)
         totalEarning.TabIndex = 21
-        totalEarning.Text = "128"
         ' 
         ' Label1
         ' 
@@ -1424,7 +1423,7 @@ Partial Class Form2
         ' 
         Bill.AutoSize = True
         Bill.Font = New Font("Tahoma", 14.25F, FontStyle.Bold, GraphicsUnit.Point)
-        Bill.Location = New Point(652, 60)
+        Bill.Location = New Point(652, 68)
         Bill.Name = "Bill"
         Bill.Size = New Size(138, 23)
         Bill.TabIndex = 23
@@ -1434,6 +1433,7 @@ Partial Class Form2
         ' 
         RichTextBox1.Location = New Point(502, 110)
         RichTextBox1.Name = "RichTextBox1"
+        RichTextBox1.ReadOnly = True
         RichTextBox1.Size = New Size(408, 379)
         RichTextBox1.TabIndex = 1
         RichTextBox1.Text = ""
@@ -1488,6 +1488,7 @@ Partial Class Form2
         RichTextBox2.Font = New Font("Calibri", 12F, FontStyle.Regular, GraphicsUnit.Point)
         RichTextBox2.Location = New Point(23, 248)
         RichTextBox2.Name = "RichTextBox2"
+        RichTextBox2.ReadOnly = True
         RichTextBox2.Size = New Size(342, 241)
         RichTextBox2.TabIndex = 24
         RichTextBox2.Text = ""
@@ -1562,10 +1563,11 @@ Partial Class Form2
         ' 
         ' productCombobox
         ' 
+        productCombobox.Font = New Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point)
         productCombobox.FormattingEnabled = True
         productCombobox.Location = New Point(23, 59)
         productCombobox.Name = "productCombobox"
-        productCombobox.Size = New Size(186, 23)
+        productCombobox.Size = New Size(186, 29)
         productCombobox.Sorted = True
         productCombobox.TabIndex = 7
         ' 
@@ -1630,9 +1632,9 @@ Partial Class Form2
         ' 
         ' Panel1
         ' 
-        Panel1.Location = New Point(209, 69)
+        Panel1.Location = New Point(226, 69)
         Panel1.Name = "Panel1"
-        Panel1.Size = New Size(989, 34)
+        Panel1.Size = New Size(981, 34)
         Panel1.TabIndex = 5
         ' 
         ' Form2

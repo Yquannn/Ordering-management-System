@@ -217,6 +217,7 @@ Public Class Form2
         'populateSales()
         getTotalIncome()
         getDailyIncome()
+
     End Sub
 
     Private Sub TabPage1_Click(sender As Object, e As EventArgs)
@@ -307,6 +308,7 @@ Public Class Form2
             populateProducts()
             fetchProduct1()
             fetchProdPicture()
+            displayProduct()
             productPicture.BackgroundImage = Nothing
             prodName.Text = ""
             prodPrice.Text = ""
@@ -424,7 +426,7 @@ Public Class Form2
         Dim res = price * quantity
         totalBalanceForm2 += res
 
-        Dim res2 = totalBalanceForm2 + totalBalanceForm3
+        Dim res2 = totalBalanceForm2 + totalBalanceForm3 + totalBalance
         totalBill.Text = res2
 
         ' Append details to RichTextBox
@@ -468,38 +470,44 @@ Public Class Form2
 
 
     Private Sub Guna2Button1_Click(sender As Object, e As EventArgs) Handles Guna2Button1.Click
-        GenerateReceipt()
-        RichTextBox2.Clear()
-        Try
-            Dim query As String = "INSERT INTO sales_history (productName, total, date) VALUES (@productName, @total, NOW())"
 
-            Con.Open()
+        If RichTextBox2.TextLength = 0 Then
+            MsgBox("please add order before confirming order!")
+        Else
+            GenerateReceipt()
 
-            Using cmd As New MySqlCommand(query, Con)
-                ' Add parameters with the provided values
-                cmd.Parameters.AddWithValue("@productName", productCombobox.Text.ToUpper())
-                cmd.Parameters.AddWithValue("@total", totalBill.Text.ToString())
+            Try
+                Dim query As String = "INSERT INTO sales_history (productName, total, date) VALUES (@productName, @total, NOW())"
 
-                ' Execute the query
-                cmd.ExecuteNonQuery()
-                Con.Close()
-            End Using
+                Con.Open()
 
-            ' Reset input fields
-            productCombobox.Text = ""
-            prodQuantity.Text = ""
-            totalBill.Text = ""
-            getTotalIncome()
-            getDailyIncome()
-        Catch ex As Exception
-            ' Display an error message if an exception occurs
-            MsgBox("An error occurred: " & ex.Message)
-        Finally
-            ' Ensure the connection is closed even if an exception occurs
-            If Con.State = ConnectionState.Open Then
-                Con.Close()
-            End If
-        End Try
+                Using cmd As New MySqlCommand(query, Con)
+                    ' Add parameters with the provided values
+                    cmd.Parameters.AddWithValue("@productName", productCombobox.Text.ToUpper())
+                    cmd.Parameters.AddWithValue("@total", totalBill.Text.ToString())
+
+                    ' Execute the query
+                    cmd.ExecuteNonQuery()
+                    Con.Close()
+                End Using
+
+                ' Reset input fields
+
+                getTotalIncome()
+                getDailyIncome()
+            Catch ex As Exception
+                ' Display an error message if an exception occurs
+                MsgBox("An error occurred: " & ex.Message)
+            Finally
+                ' Ensure the connection is closed even if an exception occurs
+                If Con.State = ConnectionState.Open Then
+                    Con.Close()
+                End If
+            End Try
+        End If
+
+
+
 
     End Sub
 
@@ -629,6 +637,7 @@ Public Class Form2
 
     Private Sub Guna2Button3_Click(sender As Object, e As EventArgs) Handles Guna2Button3.Click
         RichTextBox2.Clear()
+        RichTextBox1.Clear()
         totalBalanceForm2 = 0
         totalBalanceForm3 = 0
         totalBalance = 0
@@ -643,10 +652,16 @@ Public Class Form2
 
         RichTextBox1.DrawToBitmap(bmp, New Rectangle(0, 0, RichTextBox1.Width, RichTextBox1.Height))
 
-
         PrintPreviewDialog1.Document = PrintDocument1
         PrintPreviewDialog1.ShowDialog()
-
+        RichTextBox2.Clear()
+        productCombobox.Text = ""
+        prodQuantity.Text = ""
+        totalBill.Text = ""
+        totalBalanceForm2 = 0
+        totalBalanceForm3 = 0
+        totalBalance = 0
+        totalBill.Text = 0
         RichTextBox1.Clear()
     End Sub
 

@@ -456,9 +456,8 @@ Partial Class Form2
         dailyEarning.Font = New Font("Arial", 27.75F, FontStyle.Regular, GraphicsUnit.Point)
         dailyEarning.Location = New Point(14, 16)
         dailyEarning.Name = "dailyEarning"
-        dailyEarning.Size = New Size(81, 42)
+        dailyEarning.Size = New Size(0, 42)
         dailyEarning.TabIndex = 20
-        dailyEarning.Text = "128"
         ' 
         ' Label38
         ' 
@@ -712,7 +711,7 @@ Partial Class Form2
         ' Button8
         ' 
         Button8.BackColor = Color.Red
-        Button8.Location = New Point(528, 259)
+        Button8.Location = New Point(523, 259)
         Button8.Name = "Button8"
         Button8.Size = New Size(82, 36)
         Button8.TabIndex = 9
@@ -722,7 +721,7 @@ Partial Class Form2
         ' Button7
         ' 
         Button7.BackColor = Color.DarkOrange
-        Button7.Location = New Point(408, 259)
+        Button7.Location = New Point(404, 259)
         Button7.Name = "Button7"
         Button7.Size = New Size(91, 36)
         Button7.TabIndex = 8
@@ -732,7 +731,7 @@ Partial Class Form2
         ' Button6
         ' 
         Button6.BackColor = Color.Lime
-        Button6.Location = New Point(302, 259)
+        Button6.Location = New Point(276, 259)
         Button6.Name = "Button6"
         Button6.Size = New Size(100, 36)
         Button6.TabIndex = 6
@@ -1632,7 +1631,7 @@ Partial Class Form2
         ' 
         ' Panel1
         ' 
-        Panel1.Location = New Point(226, 69)
+        Panel1.Location = New Point(216, 69)
         Panel1.Name = "Panel1"
         Panel1.Size = New Size(981, 34)
         Panel1.TabIndex = 5

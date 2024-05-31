@@ -16,32 +16,58 @@ Public Class Form2
         productPicture.BackgroundImage = Nothing
     End Sub
 
-    Public Sub getPicture()
+    Public Sub populateProducts()
+        Try
+            If Con.State = ConnectionState.Open Then
+                Con.Close()
+            End If
 
-
+            Con.Open()
+            Dim sql As String = "SELECT * FROM product"
+            Dim cmd As New MySqlCommand(sql, Con)
+            Dim adapter As New MySqlDataAdapter(cmd)
+            Dim builder As New MySqlCommandBuilder(adapter)
+            Dim ds As New DataSet()
+            adapter.Fill(ds, "product")
+            productDGV.DataSource = ds.Tables("product")
+        Catch ex As Exception
+            MessageBox.Show("Error: " & ex.Message)
+        Finally
+            If Con.State = ConnectionState.Open Then
+                Con.Close()
+            End If
+        End Try
     End Sub
-
 
 
     Private Sub displayProduct()
         Dim query As String = "SELECT productName, productPrice FROM product"
 
         Try
+            If Con.State = ConnectionState.Open Then
+                Con.Close()
+            End If
+
             Con.Open()
             Dim cmd As New MySqlCommand(query, Con)
             Dim reader As MySqlDataReader = cmd.ExecuteReader()
 
+            productCombobox.Items.Clear() ' Clear existing items before adding new ones
             While reader.Read()
                 productCombobox.Items.Add(reader("productName").ToString())
-                product = reader("productName").ToString()
             End While
 
+            reader.Close() ' Ensure the reader is closed
+            Con.Close()
         Catch ex As MySqlException
             MessageBox.Show("Error: " & ex.Message)
         Finally
-            Con.Close()
+            If Con.State = ConnectionState.Open Then
+                Con.Close()
+            End If
         End Try
     End Sub
+
 
 
     Private Sub productCombobox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles productCombobox.SelectedIndexChanged
@@ -68,17 +94,7 @@ Public Class Form2
 
     End Sub
 
-    Public Sub populateProducts()
-        Con.Open()
-        Dim sql As String = "SELECT * FROM product"
-        Dim cmd As New MySqlCommand(sql, Con)
-        Dim adapter As New MySqlDataAdapter(cmd)
-        Dim builder As New MySqlCommandBuilder(adapter)
-        Dim ds As New DataSet()
-        adapter.Fill(ds, "product")
-        productDGV.DataSource = ds.Tables("product")
-        Con.Close()
-    End Sub
+
     'Public Sub populateSales()
     '    Con.Open()
     '    Dim sql As String = "SELECT * FROM sales_history"
@@ -91,42 +107,53 @@ Public Class Form2
     '    Con.Close()
     'End Sub
 
-
     Private Sub fetchProdPicture()
         Dim pictureBoxes() As PictureBox = {prod1, prod2, prod3, prod4, prod5, prod6, prod7, prod8, prod9, prod10}
 
-        Con.Open()
-        Dim query = "SELECT productPicture FROM product"
-        Dim cmd = New MySqlCommand(query, Con)
-        Dim rd = cmd.ExecuteReader()
-
         Try
+            If Con.State = ConnectionState.Open Then
+                Con.Close()
+            End If
+
+            Con.Open()
+            Dim query = "SELECT productPicture FROM product"
+            Dim cmd = New MySqlCommand(query, Con)
+            Dim rd = cmd.ExecuteReader()
+
             Dim index As Integer = 0
             While rd.Read() AndAlso index < pictureBoxes.Length
                 If Not rd.IsDBNull(0) Then
                     Dim pictureString As String = rd.GetString(0)
                     Dim pictureBytes() As Byte = Convert.FromBase64String(pictureString)
-                    Dim ms As New MemoryStream(pictureBytes)
-                    pictureBoxes(index).Image = Image.FromStream(ms)
-                    pictureBoxes(index).SizeMode = PictureBoxSizeMode.StretchImage
+                    Using ms As New MemoryStream(pictureBytes)
+                        pictureBoxes(index).Image = Image.FromStream(ms)
+                        pictureBoxes(index).SizeMode = PictureBoxSizeMode.StretchImage
+                    End Using
                 End If
                 index += 1
             End While
 
+            rd.Close()
         Catch ex As Exception
             MessageBox.Show("Error: " & ex.Message)
         Finally
-            Con.Close()
+            If Con.State = ConnectionState.Open Then
+                Con.Close()
+            End If
         End Try
     End Sub
 
 
-    Private Sub fetchProduct1()
 
+    Private Sub fetchProduct1()
         Dim pLabels() As Label = {p1, p2, p3, p4, p5, p6, p7, p8, p9, p10}
         Dim prLabels() As Label = {pr1, pr2, pr3, pr4, pr5, pr6, pr7, pr8, pr9, pr10}
 
         Try
+            If Con.State = ConnectionState.Open Then
+                Con.Close()
+            End If
+
             Con.Open()
             Dim sql As String = "SELECT * FROM product"
             Dim cmd As New MySqlCommand(sql, Con)
@@ -135,21 +162,22 @@ Public Class Form2
             adapter.Fill(ds, "product")
 
             If ds.Tables("product").Rows.Count > 0 Then
-                For i As Integer = 0 To Math.Min(ds.Tables("product").Rows.Count - 1, 9) ' Loop up to 10 rows or until the end of dataset
+                For i As Integer = 0 To Math.Min(ds.Tables("product").Rows.Count - 1, 9)
                     ' Display product information for each set of controls
                     pLabels(i).Text = ds.Tables("product").Rows(i)("productName").ToString()
-
                     prLabels(i).Text = "₱" & ds.Tables("product").Rows(i)("productPrice").ToString()
                 Next
             End If
         Catch ex As MySqlException
             MessageBox.Show("Error: " & ex.Message)
         Finally
-            Con.Close()
+            If Con.State = ConnectionState.Open Then
+                Con.Close()
+            End If
         End Try
-
-
     End Sub
+
+
 
     Private lastCheckTime As DateTime = DateTime.MinValue ' Initialize the last check time
 
@@ -512,34 +540,51 @@ Public Class Form2
     End Sub
 
     Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
+
         Try
             If productId = "" Then
                 MsgBox("Please select an item to be deleted!")
             Else
+                ' Ensure the connection is closed before opening it
+                If Con.State = ConnectionState.Open Then
+                    Con.Close()
+                End If
 
                 Con.Open()
+
+
                 Dim deleteQuery As String = "DELETE FROM product WHERE id = @Id"
-                Using cmd1 As New MySqlCommand(deleteQuery, Con)
-                    cmd1.Parameters.AddWithValue("@Id", productId)
-                    cmd1.ExecuteNonQuery()
+                Using cmd As New MySqlCommand(deleteQuery, Con)
+                    cmd.Parameters.AddWithValue("@Id", productId)
+                    cmd.ExecuteNonQuery()
                     MsgBox("Item deleted")
+                    ' Refresh the UI or data
                     fetchProduct1()
                     fetchProdPicture()
                     displayProduct()
                     populateProducts()
-                    Con.Close()
                 End Using
 
+                ' Close the connection after using it
+                Con.Close()
+
+
+
                 ' Reset fields after successful deletion
-                productId.Text = ""
+                productId = "" ' Assuming productId is a string variable, not a control
                 productPicture.BackgroundImage = Nothing
                 prodName.Text = ""
                 prodPrice.Text = ""
             End If
         Catch ex As Exception
             MsgBox("Error removing: " & ex.Message)
+        Finally
+            ' Ensure the connection is closed in the Finally block
+            If Con.State = ConnectionState.Open Then
+                Con.Close()
+            End If
         End Try
-        Con.Close()
+
 
     End Sub
 
@@ -672,4 +717,6 @@ Public Class Form2
     Private Sub Button22_Click(sender As Object, e As EventArgs) Handles Button22.Click
         TabControl1.SelectedTab = TabPage2
     End Sub
+
+
 End Class
